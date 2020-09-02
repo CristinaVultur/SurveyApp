@@ -24,6 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserDAO userRepository;
 
+
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -33,6 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username);
 
         if (user != null) {
+            //set roles for the user
             Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
             grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
             if (user.isAdmin()) grantedAuthorities.add(new SimpleGrantedAuthority("ADMIN"));

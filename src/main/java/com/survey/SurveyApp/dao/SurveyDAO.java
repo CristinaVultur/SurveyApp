@@ -13,8 +13,6 @@ public interface SurveyDAO {
 
     Survey closeSurvey(int id,String name);
 
-    StringBuilder getOpenedSurveys();
-
     Survey getOneSurvey(String name,int id);
 
 

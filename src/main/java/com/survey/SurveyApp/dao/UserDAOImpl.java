@@ -23,73 +23,59 @@ public class UserDAOImpl implements UserDAO {
     @Autowired
     private EntityManager entityManager;
 
-    @Override
-    public List<User> get() {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Query<User> query = currentSession.createQuery("from User ", User.class);
-        List<User> list = query.getResultList();
-        return list;
-    }
 
     @Override
     public User get(String name) {
-       // Session currentSession = entityManager.unwrap(Session.class);
         User userObj = this.findByUsername(name);
         return userObj;
     }
 
+    //arata chestionarele ce sunt deschise sau create de user
     @Override
     public List<Survey> getSurveys(String name) {
         Session currentSession = entityManager.unwrap(Session.class);
         User user = this.get(name);
 
-
         Query<Survey> query = currentSession.createQuery("from Survey where opened = true ", Survey.class);
         List<Survey> list = query.getResultList();
         for(Survey s:user.getSurveys()){
-            if(!s.isOpened())
+            if(!s.isOpened())//daca era deschis deja se afla in lista de chestionare
                 list.add(s);
         }
-
+        currentSession.close();
         return list;
 
 
     }
 
-
+    //gaseste un user dupa username
     @Override
     public User findByUsername(String username) {
-        List<User> users = this.get();
+        Session currentSession = entityManager.unwrap(Session.class);
+        Query<User> query = currentSession.createQuery("from User ", User.class);
+        List<User> users = query.getResultList();
 
         for (User c : users) {
             if (c.getUsername().equals(username))
                 return c;
         }
+        currentSession.close();
         return null;
 
     }
 
-    @Override
-    public void save(User user) {
-        Session currentSession = entityManager.unwrap(Session.class);
-        currentSession.saveOrUpdate(user);
-
-    }
-
+    //get the responses of a user to a survey
     @Override
     public Set<Response> getResponses(String name, int id) {
         Session currentSession = entityManager.unwrap(Session.class);
         User user = this.findByUsername(name);
-        Set<Response> responses = user.getResponses();
+        Set<Response> responses = user.getResponses();//toate raspunsurile userului la toate chestionarele
         for(Response r: responses){
-            if(r.getQuestion().getSurvey().getSurvey_id()!=id)
+            if(r.getQuestion().getSurvey().getSurvey_id()!=id)//ce raspuns nu apartine de survey-ul dorit, elimin din lista
                 responses.remove(r);
         }
+        currentSession.close();
         return responses;
-
-
-
-
     }
 
     //raspunde la un survey

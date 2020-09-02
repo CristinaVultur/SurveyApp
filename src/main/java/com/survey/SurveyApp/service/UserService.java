@@ -13,16 +13,10 @@ public interface UserService {
 
     User get(String name);
     List<Survey> getSurveys(String name);
-
-    void save(User coordinator);
-
-    void delete(int id);
-
     Survey createSurvey(Survey survey,String name);
 
     Survey openSurvey(int id,String name);
 
-    StringBuilder getOpenedSurveys();
 
     Set<Response> getResponses(String name, int id);
 

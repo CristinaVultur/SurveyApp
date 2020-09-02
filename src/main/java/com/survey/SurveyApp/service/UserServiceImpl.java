@@ -40,16 +40,7 @@ public class UserServiceImpl implements UserService {
         return userDAO.getSurveys(name);
     }
 
-    @Transactional
-    @Override
-    public void save(User user) {
-        userDAO.save(user);
-    }
-    @Transactional
-    @Override
-    public void delete(int id) {
 
-    }
 
     @Transactional
     @Override
@@ -64,11 +55,6 @@ public class UserServiceImpl implements UserService {
         return surveyDAO.openSurvey(id, name);
     }
 
-    @Transactional
-    @Override
-    public  StringBuilder getOpenedSurveys() {
-        return  surveyDAO.getOpenedSurveys();
-    }
 
     @Override
     public Set<Response> getResponses(String name, int id) {

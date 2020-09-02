@@ -28,9 +28,6 @@ public class SurveyDAOImpl implements SurveyDAO {
     @Override
     public Survey createSurvey(Survey survey,String name) {
         Session currentSession = entityManager.unwrap(Session.class);
-        //Transaction tx = null;
-        //try {
-            //tx = currentSession.beginTransaction();
         User creator = userDAO.findByUsername(name);
         Set<Question> questions = survey.getQuestions();
         for (Question q : questions) {
@@ -40,15 +37,9 @@ public class SurveyDAOImpl implements SurveyDAO {
                     r.setQuestion(q);
             }
         }
-            survey.setCreator(creator);
-            currentSession.save(survey);
-            //tx.commit();
-       // }catch (HibernateException e) {
-            //if (tx!=null) tx.rollback();
-            //e.printStackTrace();
-        //}finally {
-            //currentSession.close();
-       // }
+        survey.setCreator(creator);
+        currentSession.save(survey);
+        currentSession.close();
         return survey;
     }
     @Override
@@ -57,10 +48,11 @@ public class SurveyDAOImpl implements SurveyDAO {
         Session currentSession = entityManager.unwrap(Session.class);
         User user = userDAO.findByUsername(name);
         Survey survey = currentSession.get(Survey.class, id);
-        //verific daca cel ce el cere l-a si creat
+        //verific daca cel ce il cere l-a si creat
         if(survey.getCreatorId() != user.getUser_id()) {
              return null;
         }
+        currentSession.close();
         return survey;
     }
 
@@ -76,7 +68,7 @@ public class SurveyDAOImpl implements SurveyDAO {
             Survey survey =
                     (Survey) currentSession.get(Survey.class, id);
             if(survey.getCreatorId() != user.getUser_id())
-                return null;
+                return null; //cel ce doreste sa il inchida, trebuie sa fie cel ce l-a creat pentru a il putea modifica
             survey.setOpened(false);
             currentSession.update(survey);
             tx.commit();
@@ -91,26 +83,15 @@ public class SurveyDAOImpl implements SurveyDAO {
     }
 
     @Override
-    public StringBuilder getOpenedSurveys() {
-        Session currentSession = entityManager.unwrap(Session.class);
-        Query<Survey> query = currentSession.createQuery("from Survey where opened = true ", Survey.class);
-        List<Survey> list = query.getResultList();
-        StringBuilder ret = new StringBuilder();
-        for(Survey s: list){
-            ret.append("\n"+s.showSurvey()+"\n");
-        }
-        return ret;
-    }
-
-    @Override
     public Survey getOneSurvey(String name,int id) {
         Session currentSession = entityManager.unwrap(Session.class);
         Survey surveyObj = currentSession.get(Survey.class, id);
         User user = userDAO.findByUsername(name);
         if(!surveyObj.isOpened()&&user.getUser_id()!=surveyObj.getCreatorId()) {
-
+            //nu putem accesa survey-ul daca e inchis si nu suntem persoana ce l-a creat
             return null;
         }
+        currentSession.close();
         return surveyObj;
     }
 

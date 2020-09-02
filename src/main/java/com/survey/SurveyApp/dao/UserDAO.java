@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserDAO {
-    List<User> get();
 
     User get(String name);
 
@@ -17,7 +16,6 @@ public interface UserDAO {
 
     User findByUsername(String username);
 
-    void save(User user);
     Set<Response> getResponses(String name, int id);
 
     Set<Response> addResponses(String name, int []responsesGiven);

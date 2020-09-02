@@ -29,8 +29,7 @@ public class UserController {
     private ModelMapper modelMapper;
 
 
-    //show all the surveys he responded too
-    //with the answers
+    //show responses given to a survey
 
     @GetMapping("/survey/{id}/responses")
     public Set<ResponseDto> getResponses(Principal principal, @PathVariable int id){
@@ -44,7 +43,7 @@ public class UserController {
     }
 
     //open a survey created by a user
-
+    //with the responses given by other users
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/survey/responses/{survey_id}")
     public SurveyInverseDto openSurvey(Principal principal, @PathVariable int survey_id){
@@ -52,15 +51,13 @@ public class UserController {
     }
 
     //close a survey
-    //how to show message
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/survey")
     public Survey closeSurvey(Principal principal, @RequestBody int survey_id){
         return userService.closeSurvey(survey_id,principal.getName());
     }
 
-    //here
-    //show one opened survey
+    //show one survey
     @GetMapping("/survey/{id}")
     public Survey getOneSurvey(Principal principal,@PathVariable int id){
         return userService.getOneSurvey(principal.getName(),id);
@@ -98,10 +95,12 @@ public class UserController {
         SurveyInverseDto surveyDto = modelMapper.map(survey, SurveyInverseDto.class);
         return surveyDto;
     }
+
     private ResponseDto convertResponseToDo(Response response) {
         ResponseDto responseDto = modelMapper.map(response, ResponseDto.class);
         return responseDto;
     }
+
     private Set<ResponseDto> convertResponsesToDo(Set <Response> responses) {
 
         Set <ResponseDto> responseDtos= new HashSet<>();
