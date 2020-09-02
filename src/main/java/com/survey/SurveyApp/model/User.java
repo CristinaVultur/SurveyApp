@@ -1,5 +1,7 @@
 package com.survey.SurveyApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,9 +24,11 @@ public class User {
     @Column
     private boolean isAdmin;
 
+    @JsonIgnore
     @OneToMany(mappedBy="creator", cascade = CascadeType.ALL)
     private Set<Survey> surveys;
 
+    @JsonIgnore
     @ManyToMany(cascade = { CascadeType.ALL },fetch = FetchType.LAZY)
     @JoinTable(
             name = "responses_given",

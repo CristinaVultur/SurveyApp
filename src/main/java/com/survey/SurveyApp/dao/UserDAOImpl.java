@@ -1,5 +1,6 @@
 package com.survey.SurveyApp.dao;
 
+import com.survey.SurveyApp.Dto.ResponseDto;
 import com.survey.SurveyApp.model.Question;
 import com.survey.SurveyApp.model.Response;
 import com.survey.SurveyApp.model.Survey;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class UserDAOImpl implements UserDAO {
@@ -36,10 +39,21 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public String getString(String name) {
-        //Session currentSession = entityManager.unwrap(Session.class);
+    public List<Survey> getSurveys(String name) {
+        Session currentSession = entityManager.unwrap(Session.class);
         User user = this.get(name);
-        return user.toString();
+
+
+        Query<Survey> query = currentSession.createQuery("from Survey where opened = true ", Survey.class);
+        List<Survey> list = query.getResultList();
+        for(Survey s:user.getSurveys()){
+            if(!s.isOpened())
+                list.add(s);
+        }
+
+        return list;
+
+
     }
 
 
@@ -63,15 +77,24 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public StringBuilder getResponses(String name) {
-        //Session currentSession = entityManager.unwrap(Session.class);
+    public Set<Response> getResponses(String name, int id) {
+        Session currentSession = entityManager.unwrap(Session.class);
         User user = this.findByUsername(name);
-        return user.getStringResponses();
+        Set<Response> responses = user.getResponses();
+        for(Response r: responses){
+            if(r.getQuestion().getSurvey().getSurvey_id()!=id)
+                responses.remove(r);
+        }
+        return responses;
+
+
+
+
     }
 
     //raspunde la un survey
     @Override
-    public String addResponses(String name, int[] responsesGiven) {
+    public Set<Response> addResponses(String name, int[] responsesGiven) {
         Session currentSession = entityManager.unwrap(Session.class);
         Transaction tx = null;
         try {
@@ -83,7 +106,7 @@ public class UserDAOImpl implements UserDAO {
             int i=0;
             for(Question q : survey.getQuestions()){
                 if(q.isRequired() && i >= responsesGiven.length) {
-                return "Mandatory question not answered properly";
+                return null;
                     }
                 responseObj = (Response) currentSession.get(Response.class, responsesGiven[i]);
                 //check if the response belongs to the question
@@ -91,7 +114,7 @@ public class UserDAOImpl implements UserDAO {
                     //if it doesn't
                     //check if the questionwas mandatory
                     if(q.isRequired())
-                        return "Mandatory question not answered properly";
+                        return null;
                     else continue;
                 }
                 responseObj.addRespondent(userObj);
@@ -102,6 +125,7 @@ public class UserDAOImpl implements UserDAO {
             }
             currentSession.update(userObj);
             tx.commit();
+            return userObj.getResponses();
 
         }catch (
     HibernateException e) {
@@ -110,7 +134,7 @@ public class UserDAOImpl implements UserDAO {
     }finally {
         currentSession.close();
     }
-        return "Done";
+        return null;
     }
 
 }

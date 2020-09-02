@@ -7,15 +7,15 @@ import java.util.List;
 
 public interface SurveyDAO {
 
-    String createSurvey(Survey survey, String name);
+    Survey createSurvey(Survey survey, String name);
 
-    StringBuilder openSurvey(int id,String name);
+    Survey openSurvey(int id,String name);
 
-    String closeSurvey(int id,String name);
+    Survey closeSurvey(int id,String name);
 
     StringBuilder getOpenedSurveys();
 
-    StringBuilder getOneOpenedSurvey(int id);
+    Survey getOneSurvey(String name,int id);
 
 
 }

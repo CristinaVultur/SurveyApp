@@ -1,7 +1,9 @@
 package com.survey.SurveyApp.service;
 
+import com.survey.SurveyApp.Dto.ResponseDto;
 import com.survey.SurveyApp.dao.SurveyDAO;
 import com.survey.SurveyApp.dao.UserDAO;
+import com.survey.SurveyApp.model.Response;
 import com.survey.SurveyApp.model.Survey;
 import com.survey.SurveyApp.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,8 +36,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getString(String name) {
-        return userDAO.getString(name);
+    public List<Survey> getSurveys(String name) {
+        return userDAO.getSurveys(name);
     }
 
     @Transactional
@@ -50,14 +53,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public String createSurvey(Survey survey, String name) {
+    public Survey createSurvey(Survey survey, String name) {
         return surveyDAO.createSurvey(survey,name);
     }
 
     //open survey that he created
     @Transactional
     @Override
-    public StringBuilder openSurvey(int id,String name) {
+    public Survey openSurvey(int id,String name) {
         return surveyDAO.openSurvey(id, name);
     }
 
@@ -68,25 +71,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StringBuilder getResponses(String name) {
-        return userDAO.getResponses(name);
+    public Set<Response> getResponses(String name, int id) {
+        return userDAO.getResponses(name,id);
     }
 
     //close survey from opened ones
     @Override
-    public String closeSurvey(int id,String name) {
+    public Survey closeSurvey(int id,String name) {
         return surveyDAO.closeSurvey(id,name);
     }
 
     @Transactional
     @Override
-    public StringBuilder getOneOpenedSurvey(int id) {
-        return surveyDAO.getOneOpenedSurvey(id);
+    public Survey getOneSurvey(String name,int id) {
+        return surveyDAO.getOneSurvey(name,id);
     }
 
     //@Transactional
     @Override
-    public String addResponses(String name, int []responsesGivens) {
+    public Set<Response> addResponses(String name, int []responsesGivens) {
         return userDAO.addResponses(name, responsesGivens);
     }
 

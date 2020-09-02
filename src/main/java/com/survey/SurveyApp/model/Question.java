@@ -1,6 +1,8 @@
 package com.survey.SurveyApp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -21,9 +23,11 @@ public class Question {
    @Column
    boolean required;
 
+   @JsonIgnore
     @ManyToOne
     @JoinColumn(name ="survey_id")
     private Survey survey;
+
 
     @OneToMany(mappedBy="question", cascade = CascadeType.ALL)
     private Set<Response> responses;

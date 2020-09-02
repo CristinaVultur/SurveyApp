@@ -1,32 +1,35 @@
 package com.survey.SurveyApp.service;
 
+import com.survey.SurveyApp.Dto.ResponseDto;
+import com.survey.SurveyApp.model.Response;
 import com.survey.SurveyApp.model.User;
 import com.survey.SurveyApp.model.Survey;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
     List<User> get();
 
     User get(String name);
-    String getString(String name);
+    List<Survey> getSurveys(String name);
 
     void save(User coordinator);
 
     void delete(int id);
 
-    String createSurvey(Survey survey,String name);
+    Survey createSurvey(Survey survey,String name);
 
-    StringBuilder openSurvey(int id,String name);
+    Survey openSurvey(int id,String name);
 
     StringBuilder getOpenedSurveys();
 
-    StringBuilder getResponses(String name);
+    Set<Response> getResponses(String name, int id);
 
    // public UserDetails loadUserByUsername(String username);
-    String closeSurvey(int id,String name);
+    Survey closeSurvey(int id,String name);
 
-    StringBuilder getOneOpenedSurvey(int id);
+    Survey getOneSurvey(String name,int id);
 
-    String addResponses(String name, int []responsesGivens);
+    Set<Response> addResponses(String name, int []responsesGivens);
 }

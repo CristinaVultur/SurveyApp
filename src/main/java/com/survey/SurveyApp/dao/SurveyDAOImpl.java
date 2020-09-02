@@ -26,7 +26,7 @@ public class SurveyDAOImpl implements SurveyDAO {
     UserDAO userDAO;
 
     @Override
-    public String createSurvey(Survey survey,String name) {
+    public Survey createSurvey(Survey survey,String name) {
         Session currentSession = entityManager.unwrap(Session.class);
         //Transaction tx = null;
         //try {
@@ -49,24 +49,23 @@ public class SurveyDAOImpl implements SurveyDAO {
         //}finally {
             //currentSession.close();
        // }
-        return "Survey Created";
+        return survey;
     }
     @Override
-    public StringBuilder openSurvey(int id,String name) {
+    public Survey openSurvey(int id,String name) {
 
         Session currentSession = entityManager.unwrap(Session.class);
         User user = userDAO.findByUsername(name);
         Survey survey = currentSession.get(Survey.class, id);
         //verific daca cel ce el cere l-a si creat
         if(survey.getCreatorId() != user.getUser_id()) {
-             StringBuilder ret = new StringBuilder("You are not allowed here");
-             return ret;
+             return null;
         }
-        return survey.showAnswers();
+        return survey;
     }
 
     @Override
-    public String closeSurvey(int id,String name) {
+    public Survey closeSurvey(int id,String name) {
         Session currentSession = entityManager.unwrap(Session.class);
 
         Transaction tx = null;
@@ -77,18 +76,18 @@ public class SurveyDAOImpl implements SurveyDAO {
             Survey survey =
                     (Survey) currentSession.get(Survey.class, id);
             if(survey.getCreatorId() != user.getUser_id())
-                return "You are not allowed to close this survey";
+                return null;
             survey.setOpened(false);
             currentSession.update(survey);
             tx.commit();
-            return "Survey closed successfully";
+            return survey;
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();
         }finally {
             currentSession.close();
         }
-        return "idk";
+        return null;
     }
 
     @Override
@@ -104,15 +103,15 @@ public class SurveyDAOImpl implements SurveyDAO {
     }
 
     @Override
-    public StringBuilder getOneOpenedSurvey(int id) {
+    public Survey getOneSurvey(String name,int id) {
         Session currentSession = entityManager.unwrap(Session.class);
         Survey surveyObj = currentSession.get(Survey.class, id);
-        if(!surveyObj.isOpened()) {
-            StringBuilder not = new StringBuilder();
-            not.append("Survey not opened");
-            return not;
+        User user = userDAO.findByUsername(name);
+        if(!surveyObj.isOpened()&&user.getUser_id()!=surveyObj.getCreatorId()) {
+
+            return null;
         }
-        return surveyObj.showSurvey();
+        return surveyObj;
     }
 
 }

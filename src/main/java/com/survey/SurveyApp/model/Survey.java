@@ -1,5 +1,7 @@
 package com.survey.SurveyApp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -17,6 +19,7 @@ public class Survey {
     @Column
     private boolean opened;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User creator;

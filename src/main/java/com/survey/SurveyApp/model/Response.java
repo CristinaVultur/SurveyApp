@@ -1,6 +1,7 @@
 package com.survey.SurveyApp.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class Response {
     @Column
     private String text;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name ="question_id")
     private Question question;
@@ -29,7 +31,7 @@ public class Response {
     public Set<User> getRespondents() {
         return respondents;
     }
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "responses")
     private Set<User> respondents = new HashSet<>();
 
