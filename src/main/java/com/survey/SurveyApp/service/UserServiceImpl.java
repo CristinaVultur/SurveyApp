@@ -26,11 +26,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public List<User> get() {
-        return userDAO.get();
-    }
-    @Transactional
-    @Override
     public User get(String name) {
         return userDAO.get(name);
     }

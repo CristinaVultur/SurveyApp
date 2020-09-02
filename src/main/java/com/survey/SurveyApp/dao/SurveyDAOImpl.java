@@ -39,7 +39,7 @@ public class SurveyDAOImpl implements SurveyDAO {
         }
         survey.setCreator(creator);
         currentSession.save(survey);
-        currentSession.close();
+        
         return survey;
     }
     @Override
@@ -52,7 +52,7 @@ public class SurveyDAOImpl implements SurveyDAO {
         if(survey.getCreatorId() != user.getUser_id()) {
              return null;
         }
-        currentSession.close();
+
         return survey;
     }
 
@@ -91,7 +91,7 @@ public class SurveyDAOImpl implements SurveyDAO {
             //nu putem accesa survey-ul daca e inchis si nu suntem persoana ce l-a creat
             return null;
         }
-        currentSession.close();
+
         return surveyObj;
     }
 

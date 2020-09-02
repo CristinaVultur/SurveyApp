@@ -42,7 +42,7 @@ public class UserDAOImpl implements UserDAO {
             if(!s.isOpened())//daca era deschis deja se afla in lista de chestionare
                 list.add(s);
         }
-        currentSession.close();
+
         return list;
 
 
@@ -59,7 +59,7 @@ public class UserDAOImpl implements UserDAO {
             if (c.getUsername().equals(username))
                 return c;
         }
-        currentSession.close();
+
         return null;
 
     }
@@ -74,7 +74,6 @@ public class UserDAOImpl implements UserDAO {
             if(r.getQuestion().getSurvey().getSurvey_id()!=id)//ce raspuns nu apartine de survey-ul dorit, elimin din lista
                 responses.remove(r);
         }
-        currentSession.close();
         return responses;
     }
 

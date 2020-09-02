@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public interface UserService {
-    List<User> get();
 
     User get(String name);
     List<Survey> getSurveys(String name);
