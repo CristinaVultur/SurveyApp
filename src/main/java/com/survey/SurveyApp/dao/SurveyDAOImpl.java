@@ -39,7 +39,7 @@ public class SurveyDAOImpl implements SurveyDAO {
         }
         survey.setCreator(creator);
         currentSession.save(survey);
-        
+
         return survey;
     }
     @Override
