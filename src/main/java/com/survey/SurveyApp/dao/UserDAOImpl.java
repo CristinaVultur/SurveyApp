@@ -70,11 +70,12 @@ public class UserDAOImpl implements UserDAO {
         Session currentSession = entityManager.unwrap(Session.class);
         User user = this.findByUsername(name);
         Set<Response> responses = user.getResponses();//toate raspunsurile userului la toate chestionarele
+        Set<Response> returned = new HashSet<>();
         for(Response r: responses){
-            if(r.getQuestion().getSurvey().getSurvey_id()!=id)//ce raspuns nu apartine de survey-ul dorit, elimin din lista
-                responses.remove(r);
+            if(r.getQuestion().getSurvey().getSurvey_id()==id)//ce raspuns apartine de survey-ul dorit, adaug la lista
+                returned.add(r);
         }
-        return responses;
+        return returned;
     }
 
     //raspunde la un survey
