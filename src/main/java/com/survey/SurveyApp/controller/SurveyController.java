@@ -31,13 +31,13 @@ public class SurveyController {
 
     //show responses given to a survey
 
-    @GetMapping("/survey/{id}/responses")
+    @GetMapping("/surveys/{id}/responses")
     public Set<ResponseDto> getResponses(Principal principal, @PathVariable int id){
         return convertResponsesToDo(userService.getResponses(principal.getName(), id));
     }
     //show open surveys for resp.
     //all open+created for coord
-    @GetMapping("/survey")
+    @GetMapping("/surveys")
     public List<SurveyDto> getSurveys(Principal principal){
         return convertSurveysToDo(userService.getSurveys(principal.getName()));
     }
@@ -45,34 +45,34 @@ public class SurveyController {
     //open a survey created by a user
     //with the responses given by other users
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/survey/responses/{survey_id}")
-    public SurveyInverseDto openSurvey(Principal principal, @PathVariable int survey_id){
-        return convertSurveyInverseToDo(userService.openSurvey(survey_id,principal.getName()));
+    @GetMapping("/surveys/{id}/responses-management")
+    public SurveyInverseDto openSurvey(Principal principal, @PathVariable int id){
+        return convertSurveyInverseToDo(userService.openSurvey(id,principal.getName()));
     }
 
     //close a survey
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/survey")
+    @PutMapping("/surveys")
     public Survey closeSurvey(Principal principal, @RequestBody int survey_id){
         return userService.closeSurvey(survey_id,principal.getName());
     }
 
     //show one survey
-    @GetMapping("/survey/{id}")
+    @GetMapping("/surveys/{id}")
     public Survey getOneSurvey(Principal principal,@PathVariable int id){
         return userService.getOneSurvey(principal.getName(),id);
     }
 
     //respond with an array: [id1,id2,0,id4], where 0 shows that u give no answer
     //respond to a survey
-    @PostMapping("/survey/{survey_id}")
-    public Set<ResponseDto> respondToSurvey(Principal principal, @PathVariable int survey_id, @RequestBody int []responsesGiven){
-        return convertResponsesToDo(userService.addResponses(principal.getName(), responsesGiven,survey_id));
+    @PostMapping("/surveys/{id}")
+    public Set<ResponseDto> respondToSurvey(Principal principal, @PathVariable int id, @RequestBody int []responsesGiven){
+        return convertResponsesToDo(userService.addResponses(principal.getName(), responsesGiven,id));
     }
 
     //create new survey
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/survey")
+    @PostMapping("/surveys")
     public Survey createSurvey(Principal principal,@RequestBody Survey surveyObj){
         return userService.createSurvey(surveyObj,principal.getName());
     }
