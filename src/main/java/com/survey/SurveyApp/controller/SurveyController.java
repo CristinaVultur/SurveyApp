@@ -20,7 +20,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping
-public class UserController {
+public class SurveyController {
 
     @Autowired
     private UserService userService;
@@ -63,11 +63,11 @@ public class UserController {
         return userService.getOneSurvey(principal.getName(),id);
     }
 
-
+    //respond with an array: [id1,id2,0,id4], where 0 shows that u give no answer
     //respond to a survey
     @PostMapping("/survey/{survey_id}")
     public Set<ResponseDto> respondToSurvey(Principal principal, @PathVariable int survey_id, @RequestBody int []responsesGiven){
-        return convertResponsesToDo(userService.addResponses(principal.getName(), responsesGiven));
+        return convertResponsesToDo(userService.addResponses(principal.getName(), responsesGiven,survey_id));
     }
 
     //create new survey

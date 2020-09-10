@@ -59,20 +59,20 @@ public class SurveyDAOImpl implements SurveyDAO {
     @Override
     public Survey closeSurvey(int id,String name) {
         Session currentSession = entityManager.unwrap(Session.class);
-
+        User user = userDAO.findByUsername(name);
         Transaction tx = null;
         try{
             tx = currentSession.beginTransaction();
 
-            User user = userDAO.findByUsername(name);
-            Survey survey =
-                    (Survey) currentSession.get(Survey.class, id);
+            Survey survey = (Survey) currentSession.get(Survey.class, id);
             if(survey.getCreatorId() != user.getUser_id())
                 return null; //cel ce doreste sa il inchida, trebuie sa fie cel ce l-a creat pentru a il putea modifica
-            survey.setOpened(false);
-            currentSession.update(survey);
-            tx.commit();
-            return survey;
+            else {
+                survey.setOpened(false);
+                currentSession.update(survey);
+                tx.commit();
+                return survey;
+            }
         }catch (HibernateException e) {
             if (tx!=null) tx.rollback();
             e.printStackTrace();

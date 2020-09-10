@@ -70,8 +70,8 @@ public class UserServiceImpl implements UserService {
 
     //@Transactional
     @Override
-    public Set<Response> addResponses(String name, int []responsesGivens) {
-        return userDAO.addResponses(name, responsesGivens);
+    public Set<Response> addResponses(String name, int []responsesGivens,int survey_id) {
+        return userDAO.addResponses(name, responsesGivens, survey_id);
     }
 
 }

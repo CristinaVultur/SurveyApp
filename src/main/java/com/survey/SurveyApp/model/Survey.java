@@ -24,7 +24,7 @@ public class Survey {
     @JoinColumn(name ="user_id")
     private User creator;
 
-    @OneToMany(mappedBy="survey", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="survey", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Question> questions;
 
     public int getSurvey_id() {

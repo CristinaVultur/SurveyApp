@@ -29,7 +29,7 @@ public class Question {
     private Survey survey;
 
 
-    @OneToMany(mappedBy="question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="question", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Set<Response> responses;
 
     public int getId() {

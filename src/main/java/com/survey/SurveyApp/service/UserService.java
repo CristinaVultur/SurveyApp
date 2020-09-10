@@ -24,5 +24,5 @@ public interface UserService {
 
     Survey getOneSurvey(String name,int id);
 
-    Set<Response> addResponses(String name, int []responsesGivens);
+    Set<Response> addResponses(String name, int []responsesGivens,int survey_id);
 }

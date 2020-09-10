@@ -1,0 +1,36 @@
+{
+    "survey_id": 1,
+    "name": "SurveyTestCreate",
+    "opened": true,
+    "questions": [
+        {
+            "question_id": 1,
+            "text": "NuvrRaspuns1",
+            "required": false,
+            "responses": [
+                {
+                    "response_id": 1,
+                    "text": "S1Q2R1"
+                }
+            ],
+            "id": 1
+        },
+        {
+            "question_id": 2,
+            "text": "VreauRaspuns1",
+            "required": true,
+            "responses": [
+                {
+                    "response_id": 3,
+                    "text": "S1Q1R2"
+                },
+                {
+                    "response_id": 2,
+                    "text": "S1Q1R1"
+                }
+            ],
+            "id": 2
+        }
+    ],
+    "creatorId": 1
+}

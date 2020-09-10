@@ -80,34 +80,31 @@ public class UserDAOImpl implements UserDAO {
 
     //raspunde la un survey
     @Override
-    public Set<Response> addResponses(String name, int[] responsesGiven) {
+    public Set<Response> addResponses(String name, int[] responsesGiven,int survey_id) {
         Session currentSession = entityManager.unwrap(Session.class);
         Transaction tx = null;
         try {
             tx = currentSession.beginTransaction();
             User userObj = this.findByUsername(name);
-            Response responseObj = (Response) currentSession.get(Response.class, responsesGiven[0]);
-            Survey survey = (Survey)  currentSession.get(Survey.class, responseObj.viewQuestion().viewSurvey().getSurvey_id());
-            //serch for responses after id:
+            Survey survey = (Survey) currentSession.get(Survey.class, survey_id);
             int i=0;
             for(Question q : survey.getQuestions()){
-                if(q.isRequired() && i >= responsesGiven.length) {
-                return null;
+                if(responsesGiven[i] == 0)
+                    if(q.isRequired())//u need to give an answer
+                        return userObj.getResponses();
+                 i++;
+            }
+            for(i = 0; i < responsesGiven.length;i++){
+                if(responsesGiven[i] == 0){
+                        continue;//continue to the next answer
                     }
-                responseObj = (Response) currentSession.get(Response.class, responsesGiven[i]);
-                //check if the response belongs to the question
-                if(q.getId() != responseObj.viewQuestion().getId()){
-                    //if it doesn't
-                    //check if the questionwas mandatory
-                    if(q.isRequired())
-                        return null;
-                    else continue;
+                else{//add the response
+                    Response responseObj = (Response) currentSession.get(Response.class, responsesGiven[i]);
+                    responseObj.addRespondent(userObj);
+                    currentSession.saveOrUpdate(responseObj);
+                    userObj.getResponses().add(responseObj);
+                    currentSession.update(responseObj);
                 }
-                responseObj.addRespondent(userObj);
-                currentSession.saveOrUpdate(responseObj);
-                userObj.getResponses().add(responseObj);
-                currentSession.update(responseObj);
-                i++;
             }
             currentSession.update(userObj);
             tx.commit();

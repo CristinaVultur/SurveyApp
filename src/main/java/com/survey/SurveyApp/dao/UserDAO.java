@@ -18,5 +18,5 @@ public interface UserDAO {
 
     Set<Response> getResponses(String name, int id);
 
-    Set<Response> addResponses(String name, int []responsesGiven);
+    Set<Response> addResponses(String name, int []responsesGiven,int survey_id);
 }
