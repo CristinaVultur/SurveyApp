@@ -12,23 +12,31 @@ Users of this app are divided into two distinct roles, each having different
 requirements:
 -Survey Coordinators define and conduct surveys. This is an administrative
 function not available to normal users.
+
 -Survey Respondents Complete surveys and view results. They have no
 administrative privileges within the app.
 
 Defining a Survey
 -A survey contains one or more questions. The question can have one or more
 answer.
+
 -A survey should have a title.
+
 -Some questions can be marked as required
 
 Conducting a Survey
 -Survey Coordinator can open a survey from previously defined surveys.
+
 -Survey Coordinators can close a survey from open surveys.
+
 -Survey Respondent can view open surveys
+
 -Survey Respondent can respond to open surveys
+
 
 Viewing Survey Results
 -Survey Coordinators can view all responses to his surveys
+
 -Survey Respondents can view his responses.
 
 Other features
